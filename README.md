@@ -1,16 +1,48 @@
-# flutter_inventary
+<h1 align="center">
+  <img src="https://cdn-icons-png.flaticon.com/512/2897/2897785.png" alt="Cloud" width="200">
+  <br>
+  Inventary Application With Flutter<br/>
+  v.1.0
+  <br>
+</h1>
 
-A new Flutter project.
+## Features
 
-## Getting Started
+- No Features Available
 
-This project is a starting point for a Flutter application.
+## System Requirements
 
-A few resources to get you started if this is your first Flutter project:
+- [x] Flutter 3.3.1
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Config & Start Services
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[1] Clone the repository With:
+```sh
+git clone https://github.com/Luaylin/flutter_inventary.git
+```
+[2] Install al Libraries and Dependencies With:
+```sh
+flutter packages get
+```
+[3] Run the project in development mode With:
+```sh
+flutter run
+```
+[4] Add changes in git with:
+```sh
+git add .
+```
+[5] Commit your changes with:
+```sh
+git commit -m "{message}"
+```
+[6] Upload your changes in the remote repository with:
+```sh
+git push origin *branch*
+```
+## Collaborators
+
+- [Luaylin](https://github.com/Luaylin) - **Jorge Luis Calle Morales** <<jorgecm123321@gmail.com>>
+
+## FAQ
+
