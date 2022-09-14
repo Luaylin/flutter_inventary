@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inventary/src/router/main.dart';
 import 'package:go_router/go_router.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,8 +14,12 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               ElevatedButton(
-                onPressed: () => context.go('/inventary'),
-                child: const Text('Go to inventary'),
+                onPressed: () => context.go('/' + routes["incomeMovement"]),
+                child: const Text('Registrar Ingresos'),
+              ),
+              ElevatedButton(
+                onPressed: () => context.go('/' + routes["incomeDetails"]),
+                child: const Text('Registrar Salidas'),
               ),
             ],
           ),
