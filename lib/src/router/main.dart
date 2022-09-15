@@ -67,10 +67,62 @@ getRouter() {
           ),
           //Detalles
           GoRoute(
-            path: routes["incomeDetails"],
-            builder: (BuildContext context, GoRouterState state) =>
-                IncomeDetailsPage(titles["incomeDetails"]),
-          ),
+              path: routes["incomeDetails"],
+              builder: (BuildContext context, GoRouterState state) {
+                final query = state.queryParametersAll;
+                final Map data = {
+                  "fullname": "",
+                  "document": "",
+                  "email": "",
+                  "unit": "",
+                  "local": "",
+                  "reference": "",
+                  "date": "",
+                  "cod": ""
+                };
+                final fullname = query["fullname"],
+                    document = query["document"],
+                    email = query["email"],
+                    unit = query["unit"],
+                    local = query["local"],
+                    reference = query["reference"],
+                    date = query["date"],
+                    cod = query["cod"];
+                //Valida la estructura del JSON
+                if (fullname != null &&
+                    document != null &&
+                    email != null &&
+                    unit != null &&
+                    local != null &&
+                    reference != null &&
+                    date != null &&
+                    cod != null) {
+                  if (fullname.isNotEmpty &&
+                      document.isNotEmpty &&
+                      email.isNotEmpty &&
+                      unit.isNotEmpty &&
+                      local.isNotEmpty &&
+                      reference.isNotEmpty &&
+                      date.isNotEmpty &&
+                      cod.isNotEmpty) {
+                    data["fullname"] = fullname[0];
+                    data["document"] = document[0];
+                    data["email"] = email[0];
+                    data["unit"] = unit[0];
+                    data["local"] = local[0];
+                    data["reference"] = reference[0];
+                    data["date"] = date[0];
+                    data["cod"] = cod[0];
+                    return IncomeDetailsPage(titles["incomeDetails"], data);
+                  } else {
+                    /*Manda a la ruta de error*/ return IncomeDetailsPage(
+                        titles["incomeDetails"], data);
+                  }
+                } else {
+                  /*Manda a la ruta de error*/ return IncomeDetailsPage(
+                      titles["incomeDetails"], data);
+                }
+              }),
           //Detalles
           GoRoute(
             path: routes["outputMovement"],

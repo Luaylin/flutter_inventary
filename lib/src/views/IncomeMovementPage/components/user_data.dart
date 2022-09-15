@@ -102,9 +102,9 @@ class UserData extends StatelessWidget {
               format: dateFormat,
               onSaved: (DateTime? value) {
                 if (value != null) {
-                  dataForm["cod"] = dateFormat.format(value);
+                  dataForm["date"] = dateFormat.format(value);
                 } else {
-                  dataForm["cod"] = "";
+                  dataForm["date"] = "";
                 }
               },
               validator: (DateTime? value) {

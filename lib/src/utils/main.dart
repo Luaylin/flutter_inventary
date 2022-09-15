@@ -78,3 +78,9 @@ convertMapToQuery(Map data) {
       .forEach((e) => response = response + e.key + "=" + e.value + "&");
   return response.substring(0, response.length - 1);
 }
+
+convertMapToList(Map data) {
+  List<String> response = [];
+  data.entries.forEach((e) => response.add(e.value));
+  return response;
+}
