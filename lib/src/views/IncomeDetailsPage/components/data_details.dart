@@ -1,8 +1,9 @@
-import 'dart:html';
-
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inventary/src/utils/main.dart';
-import 'package:flutter_inventary/src/widgets/custom_table.dart';
+import 'package:flutter_inventary/src/controller/registerIncomeDetails/main.dart';
+import 'package:go_router/go_router.dart';
+import 'package:flutter_inventary/src/router/main.dart';
 
 class DataDetails extends StatefulWidget {
   const DataDetails();
@@ -11,6 +12,18 @@ class DataDetails extends StatefulWidget {
 }
 
 class _DataDetails extends State<DataDetails> {
+  List<TextEditingController> txt = [
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+  ];
+
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   List<String> _headers = [
     "CODIGO PRATRIMONIAL",
@@ -36,6 +49,8 @@ class _DataDetails extends State<DataDetails> {
     "observations": " "
   };
 
+  dynamic countName = "N° DE ORDEN";
+
   List<List<String>> _content = [];
 
   void grow(headers, content) {
@@ -47,23 +62,65 @@ class _DataDetails extends State<DataDetails> {
 
   @override
   Widget build(BuildContext context) {
+    List<DataColumn> WriteHeaders() {
+      List<DataColumn> response = [];
+      if (countName != null) {
+        response.add(DataColumn(label: Center(child: Text(countName!))));
+      }
+      for (var i = 0; i < _headers.length; i++) {
+        response.add(DataColumn(label: Center(child: Text(_headers[i]))));
+      }
+      response.add(const DataColumn(label: Center(child: Text("ACCIONES"))));
+      return response;
+    }
+
+    List<DataRow> WriteContent() {
+      List<DataRow> response = [];
+      List<DataCell> aux = [];
+      for (var i = 0; i < _content.length; i++) {
+        if (countName != null)
+          aux.add(DataCell(Center(child: Text((i + 1).toString()))));
+        for (var j = 0; j < _content[i].length; j++) {
+          if (j == 1) {
+            aux.add(DataCell(Text(_content[i][j])));
+          } else {
+            aux.add(DataCell(Center(child: Text(_content[i][j]))));
+          }
+        }
+        aux.add(DataCell(Center(
+            child: ElevatedButton(
+          onPressed: () {
+            _content.removeAt(i);
+            grow(_headers, _content);
+          },
+          child: const Text('Eliminar'),
+        ))));
+        response.add(DataRow(cells: aux));
+        aux = [];
+      }
+      return response;
+    }
+
     final details_form = Form(
         key: _key,
         child: Column(
           children: [
             TextFormField(
+              controller: txt[0],
               decoration: const InputDecoration(
                 icon: Icon(Icons.branding_watermark_rounded),
-                labelText: 'Codigo Patrimonial *',
+                labelText: 'Codigo Patrimonial',
               ),
               onSaved: (String? value) {
-                data["patrimonial"] = value;
+                data["patrimonial"] =
+                    value == null || value == "" ? "S/C" : value;
               },
               validator: (String? value) {
                 return null;
               },
             ),
             TextFormField(
+              controller: txt[1],
               decoration: const InputDecoration(
                 icon: Icon(Icons.abc),
                 labelText: 'Denominación *',
@@ -72,13 +129,14 @@ class _DataDetails extends State<DataDetails> {
                 data["denomination"] = value;
               },
               validator: (String? value) {
-                return null;
+                return validateSimpleInputString(value);
               },
             ),
             TextFormField(
+              controller: txt[2],
               decoration: const InputDecoration(
                 icon: Icon(Icons.add_chart_outlined),
-                labelText: 'Marca *',
+                labelText: 'Marca',
               ),
               onSaved: (String? value) {
                 data["mark"] = value;
@@ -88,9 +146,10 @@ class _DataDetails extends State<DataDetails> {
               },
             ),
             TextFormField(
+              controller: txt[3],
               decoration: const InputDecoration(
                 icon: Icon(Icons.model_training),
-                labelText: 'Modelo *',
+                labelText: 'Modelo',
               ),
               onSaved: (String? value) {
                 data["model"] = value;
@@ -100,6 +159,7 @@ class _DataDetails extends State<DataDetails> {
               },
             ),
             TextFormField(
+              controller: txt[4],
               decoration: const InputDecoration(
                 icon: Icon(Icons.color_lens),
                 labelText: 'Color *',
@@ -108,13 +168,14 @@ class _DataDetails extends State<DataDetails> {
                 data["color"] = value;
               },
               validator: (String? value) {
-                return null;
+                return validateSimpleInputString(value);
               },
             ),
             TextFormField(
+              controller: txt[5],
               decoration: const InputDecoration(
                 icon: Icon(Icons.qr_code_scanner),
-                labelText: 'Serie *',
+                labelText: 'Serie',
               ),
               onSaved: (String? value) {
                 data["serie"] = value;
@@ -124,9 +185,10 @@ class _DataDetails extends State<DataDetails> {
               },
             ),
             TextFormField(
+              controller: txt[6],
               decoration: const InputDecoration(
                 icon: Icon(Icons.error_outline_sharp),
-                labelText: 'Otros *',
+                labelText: 'Otros',
               ),
               onSaved: (String? value) {
                 data["others"] = value;
@@ -136,9 +198,10 @@ class _DataDetails extends State<DataDetails> {
               },
             ),
             TextFormField(
+              controller: txt[7],
               decoration: const InputDecoration(
                 icon: Icon(Icons.abc),
-                labelText: 'Conser. *',
+                labelText: 'Conser.',
               ),
               onSaved: (String? value) {
                 data["conservation"] = value;
@@ -148,9 +211,10 @@ class _DataDetails extends State<DataDetails> {
               },
             ),
             TextFormField(
+              controller: txt[8],
               decoration: const InputDecoration(
                 icon: Icon(Icons.crisis_alert_sharp),
-                labelText: 'Observaciones *',
+                labelText: 'Observaciones',
               ),
               onSaved: (String? value) {
                 data["observations"] = value;
@@ -173,18 +237,30 @@ class _DataDetails extends State<DataDetails> {
                         //Create Query params
                         _content.add(convertMapToList(data));
                         grow(_headers, _content);
+                        for (var i = 0; i < txt.length; i++) {
+                          txt[i].clear();
+                        }
                       }
                     },
                     child: const Text('+ Añadir al listado'),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_key.currentState!.validate()) {
-                        _key.currentState!.save();
-                      }
-                    },
-                    child: const Text('Registrar Listado'),
-                  ),
+                  const SizedBox(width: 30),
+                  if (_content.length > 0)
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_content.length > 0) {
+                          Map response = sendRegisterOfIncome(true);
+                          if (response["status"]) {
+                            context.go('/' +
+                                routes["confirmation"] +
+                                '?success=true&message=Registro realizado con exito&redirection=/hola&redirection_message=visualizar');
+                          } else {
+                            print("Incorrecto");
+                          }
+                        }
+                      },
+                      child: const Text('Registrar Listado'),
+                    ),
                 ],
               )),
             ),
@@ -204,7 +280,16 @@ class _DataDetails extends State<DataDetails> {
               "REGISTRO DE DETALLES",
             ),
             details_form,
-            Expanded(child: CustomTable(_headers, _content, null))
+            Expanded(
+                child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: DataTable2(
+                      columnSpacing: 12,
+                      horizontalMargin: 12,
+                      minWidth: 600,
+                      columns: WriteHeaders(),
+                      rows: WriteContent(),
+                    )))
           ],
         ));
     return data_details;

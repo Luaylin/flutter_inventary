@@ -115,12 +115,20 @@ getRouter() {
                     data["cod"] = cod[0];
                     return IncomeDetailsPage(titles["incomeDetails"], data);
                   } else {
-                    /*Manda a la ruta de error*/ return IncomeDetailsPage(
-                        titles["incomeDetails"], data);
+                    return ConfirmationPage(titles["confirmation"], {
+                      "success": false,
+                      "message": "Error 404",
+                      "redirection": "",
+                      "redirection_message": ""
+                    });
                   }
                 } else {
-                  /*Manda a la ruta de error*/ return IncomeDetailsPage(
-                      titles["incomeDetails"], data);
+                  return ConfirmationPage(titles["confirmation"], {
+                    "success": false,
+                    "message": "Error 404",
+                    "redirection": "",
+                    "redirection_message": ""
+                  });
                 }
               }),
           //Detalles
@@ -137,10 +145,51 @@ getRouter() {
           ),
           //Detalles
           GoRoute(
-            path: routes["confirmation"],
-            builder: (BuildContext context, GoRouterState state) =>
-                ConfirmationPage(titles["confirmation"]),
-          ),
+              path: routes["confirmation"],
+              builder: (BuildContext context, GoRouterState state) {
+                final query = state.queryParametersAll;
+                final Map data = {
+                  "success": false,
+                  "message": "",
+                  "redirection": "",
+                  "redirection_message": ""
+                };
+                final success = query["success"],
+                    message = query["message"],
+                    redirection = query["redirection"],
+                    redirection_message = query["redirection_message"];
+                //Valida la estructura del JSON
+                if (success != null &&
+                    message != null &&
+                    redirection != null &&
+                    redirection_message != null) {
+                  if (success.isNotEmpty &&
+                      message.isNotEmpty &&
+                      redirection.isNotEmpty &&
+                      redirection_message.isNotEmpty) {
+                    data["success"] = success[0] == "true" ? true : false;
+                    data["message"] = message[0];
+                    data["redirection"] = redirection[0];
+                    data["redirection_message"] = redirection_message[0];
+                    return ConfirmationPage(titles["confirmation"], data);
+                  } else {
+                    /*Manda a la ruta de error*/ return ConfirmationPage(
+                        titles["confirmation"], {
+                      "success": false,
+                      "message": "Error 404",
+                      "redirection": "",
+                      "redirection_message": ""
+                    });
+                  }
+                } else {
+                  return ConfirmationPage(titles["confirmation"], {
+                    "success": false,
+                    "message": "Error 404",
+                    "redirection": "",
+                    "redirection_message": ""
+                  });
+                }
+              }),
         ],
       ),
     ],
