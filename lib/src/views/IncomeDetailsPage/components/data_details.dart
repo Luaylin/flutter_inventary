@@ -1,9 +1,9 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inventary/src/utils/main.dart';
-import 'package:flutter_inventary/src/controller/registerIncomeDetails/main.dart';
-import 'package:go_router/go_router.dart';
-import 'package:flutter_inventary/src/router/main.dart';
+//import 'package:flutter_inventary/src/controller/httpRequest/main.dart';
+//import 'package:go_router/go_router.dart';
+//import 'package:flutter_inventary/src/router/main.dart';
 
 class DataDetails extends StatefulWidget {
   const DataDetails();
@@ -245,18 +245,18 @@ class _DataDetails extends State<DataDetails> {
                     child: const Text('+ Añadir al listado'),
                   ),
                   const SizedBox(width: 30),
-                  if (_content.length > 0)
+                  if (_content.isNotEmpty)
                     ElevatedButton(
                       onPressed: () {
-                        if (_content.length > 0) {
-                          Map response = sendRegisterOfIncome(true);
+                        if (_content.isNotEmpty) {
+                          /*Map response = sendRegisterOfIncome(true);
                           if (response["status"]) {
                             context.go('/' +
                                 routes["confirmation"] +
                                 '?success=true&message=Registro realizado con exito&redirection=/hola&redirection_message=visualizar');
                           } else {
                             print("Incorrecto");
-                          }
+                          }*/
                         }
                       },
                       child: const Text('Registrar Listado'),

@@ -74,8 +74,7 @@ validateCompleteDateTimeInput(DateTime? value) {
 
 convertMapToQuery(Map data) {
   String response = "";
-  data.entries
-      .forEach((e) => response = response + e.key + "=" + e.value + "&");
+  data.entries.forEach((e) => response = '$response${e.key}=${e.value}&');
   return response.substring(0, response.length - 1);
 }
 

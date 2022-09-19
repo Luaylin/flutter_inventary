@@ -14,16 +14,16 @@ class ConfirmationPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             data["success"]
-                ? Icon(
+                ? const Icon(
                     Icons.check_circle_outline,
                     color: Color.fromARGB(255, 14, 197, 7),
                     size: 200,
                   )
-                : Icon(Icons.error_outline_sharp,
+                : const Icon(Icons.error_outline_sharp,
                     color: Color.fromARGB(255, 219, 11, 11), size: 200),
-            Text(""),
-            Text(data["message"], style: TextStyle(fontSize: 25)),
-            Text(""),
+            const Text(""),
+            Text(data["message"], style: const TextStyle(fontSize: 25)),
+            const Text(""),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -34,14 +34,15 @@ class ConfirmationPage extends StatelessWidget {
                       context.go(data["redirection"]);
                     },
                     child: Text(data["redirection_message"],
-                        style: TextStyle(fontSize: 17)),
+                        style: const TextStyle(fontSize: 17)),
                   ),
                 if (data["redirection"] != "") const SizedBox(width: 30),
                 ElevatedButton(
                   onPressed: () {
                     context.go('/');
                   },
-                  child: Text("Ir al Inicio", style: TextStyle(fontSize: 17)),
+                  child: const Text("Ir al Inicio",
+                      style: TextStyle(fontSize: 17)),
                 ),
               ],
             )

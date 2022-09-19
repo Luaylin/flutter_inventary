@@ -17,7 +17,6 @@ class CustomTable extends StatelessWidget {
     for (var i = 0; i < headers.length; i++) {
       response.add(DataColumn(label: Text(headers[i])));
     }
-    response.add(DataColumn(label: Text("Acciones")));
     return response;
   }
 
@@ -29,12 +28,6 @@ class CustomTable extends StatelessWidget {
       for (var j = 0; j < content[i].length; j++) {
         aux.add(DataCell(Text(content[i][j])));
       }
-      aux.add(DataCell(
-        ElevatedButton(
-          onPressed: () {},
-          child: const Text('Eliminar'),
-        ),
-      ));
       response.add(DataRow(cells: aux));
       aux = [];
     }

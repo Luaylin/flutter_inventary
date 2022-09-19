@@ -28,7 +28,7 @@ class UserData extends StatelessWidget {
             TextFormField(
               decoration: const InputDecoration(
                 icon: Icon(Icons.person_pin_outlined),
-                labelText: 'Nombres y Apellidos *',
+                labelText: 'Nombres y Apellidos',
               ),
               onSaved: (String? value) {
                 dataForm["fullname"] = value;
@@ -41,7 +41,7 @@ class UserData extends StatelessWidget {
             TextFormField(
               decoration: const InputDecoration(
                 icon: Icon(Icons.badge_outlined),
-                labelText: 'DNI *',
+                labelText: 'DNI',
               ),
               onSaved: (String? value) {
                 dataForm["document"] = value;
@@ -53,7 +53,7 @@ class UserData extends StatelessWidget {
             TextFormField(
               decoration: const InputDecoration(
                 icon: Icon(Icons.email),
-                labelText: 'Correo Electronico *',
+                labelText: 'Correo Electronico',
               ),
               onSaved: (String? value) {
                 dataForm["email"] = value;
@@ -65,7 +65,7 @@ class UserData extends StatelessWidget {
             TextFormField(
               decoration: const InputDecoration(
                 icon: Icon(Icons.account_balance_outlined),
-                labelText: 'Organo o Unidad Organica *',
+                labelText: 'Organo o Unidad Organica',
               ),
               onSaved: (String? value) {
                 dataForm["unit"] = value;
@@ -77,7 +77,7 @@ class UserData extends StatelessWidget {
             TextFormField(
               decoration: const InputDecoration(
                 icon: Icon(Icons.add_location),
-                labelText: 'Local o Sede *',
+                labelText: 'Local o Sede',
               ),
               onSaved: (String? value) {
                 dataForm["local"] = value;
@@ -89,7 +89,7 @@ class UserData extends StatelessWidget {
             TextFormField(
               decoration: const InputDecoration(
                 icon: Icon(Icons.abc),
-                labelText: 'Referencia *',
+                labelText: 'Referencia',
               ),
               onSaved: (String? value) {
                 dataForm["reference"] = value;
@@ -98,33 +98,22 @@ class UserData extends StatelessWidget {
                 return validateSimpleInputString(value);
               },
             ),
-            DateTimeField(
-              format: dateFormat,
-              onSaved: (DateTime? value) {
-                if (value != null) {
-                  dataForm["date"] = dateFormat.format(value);
-                } else {
-                  dataForm["date"] = "";
-                }
-              },
-              validator: (DateTime? value) {
-                return validateCompleteDateTimeInput(value);
-              },
+            TextFormField(
               decoration: const InputDecoration(
-                  icon: Icon(Icons.calendar_month_outlined),
-                  labelText: "Fecha de Movimiento *"),
-              onShowPicker: (context, currentValue) {
-                return showDatePicker(
-                    context: context,
-                    firstDate: DateTime(1900),
-                    initialDate: currentValue ?? DateTime.now(),
-                    lastDate: DateTime(2100));
+                icon: Icon(Icons.calendar_month_outlined),
+                labelText: 'Fecha',
+              ),
+              onSaved: (String? value) {
+                dataForm["cod"] = value;
+              },
+              validator: (String? value) {
+                return validateSimpleInputString(value);
               },
             ),
             TextFormField(
               decoration: const InputDecoration(
                 icon: Icon(Icons.qr_code),
-                labelText: 'Codigo de Registro *',
+                labelText: 'Codigo de Registro',
               ),
               onSaved: (String? value) {
                 dataForm["cod"] = value;
@@ -137,18 +126,24 @@ class UserData extends StatelessWidget {
               margin: const EdgeInsets.only(
                 top: 20.0,
               ),
-              child: Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_key.currentState!.validate()) {
-                      _key.currentState!.save();
-                      //Create Query params
-                      context.go(
-                          '/${routes["incomeDetails"]}?${convertMapToQuery(dataForm)}');
-                    }
-                  },
-                  child: const Text('Iniciar Registro de listado'),
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      context.go('/');
+                    },
+                    child: const Text('Volver al Inicio'),
+                  ),
+                  const SizedBox(width: 30),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.go('/${routes["details"]}');
+                    },
+                    child: const Text('Visualizar Detalles'),
+                  ),
+                ],
               ),
             )
           ],

@@ -3,19 +3,24 @@ import 'package:flutter_inventary/src/router/main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:data_table_2/data_table_2.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  const HomePage({this.title = ''});
+  final String title;
+  @override
+  State<HomePage> createState() => _HomePage();
+}
+
+class _HomePage extends State<HomePage> {
   List<List<String>> content = [
-    ["1", "2", "3"],
-    ["3", "2", "1"],
-    ["2", "1", "3"]
+    ["1", "2", "3", "1", "2", "3"],
+    ["1", "2", "3", "1", "2", "3"],
+    ["1", "2", "3", "1", "2", "3"],
   ];
-  String title;
-  HomePage(this.title);
   @override
   Widget build(BuildContext context) {
-    final DataTableSource _data = MyData(content);
+    final DataTableSource _data = MyData(content, context);
     return Scaffold(
-        appBar: AppBar(title: Text(title)),
+        appBar: AppBar(title: Text(widget.title)),
         body: Container(
           margin: const EdgeInsets.only(
               top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
@@ -24,12 +29,13 @@ class HomePage extends StatelessWidget {
               Row(
                 children: <Widget>[
                   ElevatedButton(
-                    onPressed: () => context.go('/' + routes["incomeMovement"]),
+                    onPressed: () => context.go('/${routes["incomeMovement"]}'),
                     child: const Text('Registrar Ingresos'),
                   ),
                   const SizedBox(width: 30),
                   ElevatedButton(
-                    onPressed: () => context.go('/' + routes["incomeDetails"]),
+                    onPressed: () async =>
+                        context.go('/${routes["incomeDetails"]}'),
                     child: const Text('Registrar Salidas'),
                   )
                 ],
@@ -61,26 +67,40 @@ class HomePage extends StatelessWidget {
                       labelText: 'Fecha de registro',
                     ),
                   ),
-                  Text(""),
+                  const Text(""),
                   ElevatedButton(
-                    onPressed: () => context.go('/' + routes["incomeDetails"]),
+                    onPressed: () => context.go('/${routes["incomeDetails"]}'),
                     child: const Text('Filtrar'),
                   ),
-                  Text(""),
+                  const Text(""),
                 ],
               )),
               Expanded(
-                  child: PaginatedDataTable2(columns: [
+                  child: PaginatedDataTable2(columns: const [
                 DataColumn(
-                  label: Text('Column C'),
-                ),
+                    label: Center(
+                  child: Text('Código de Registro'),
+                )),
                 DataColumn(
-                  label: Text('Column D'),
-                ),
+                    label: Center(
+                  child: Text('Usuario'),
+                )),
                 DataColumn(
-                  label: Text('Column NUMBERS'),
-                  numeric: true,
-                ),
+                    label: Center(
+                  child: Text('Organo o Unidad Organica'),
+                )),
+                DataColumn(
+                    label: Center(
+                  child: Text('Local o Sede'),
+                )),
+                DataColumn(
+                    label: Center(
+                  child: Text('Fecha'),
+                )),
+                DataColumn(
+                    label: Center(
+                  child: Text('Acciones'),
+                )),
               ], source: _data))
             ],
           ),
@@ -89,14 +109,25 @@ class HomePage extends StatelessWidget {
 }
 
 class MyData extends DataTableSource {
-  List<List<String>> _data;
-  MyData(this._data);
+  final List<List<String>> _data;
+  BuildContext context;
+  MyData(this._data, this.context);
   @override
   DataRow? getRow(int index) {
     return DataRow(cells: [
       DataCell(Text(_data[index][0])),
       DataCell(Text(_data[index][1])),
       DataCell(Text(_data[index][2])),
+      DataCell(Text(_data[index][3])),
+      DataCell(Text(_data[index][4])),
+      DataCell(
+        Center(
+          child: ElevatedButton(
+            onPressed: () => context.go('/${routes["movement"]}'),
+            child: const Text('Visualizar'),
+          ),
+        ),
+      ),
     ]);
   }
 

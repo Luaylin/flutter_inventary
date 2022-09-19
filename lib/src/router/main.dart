@@ -45,7 +45,7 @@ getRouter() {
       GoRoute(
         path: routes["home"],
         builder: (BuildContext context, GoRouterState state) =>
-            HomePage(titles["home"]),
+            HomePage(title: titles["home"]),
         routes: <GoRoute>[
           //Detalles
           GoRoute(
@@ -115,7 +115,7 @@ getRouter() {
                     data["cod"] = cod[0];
                     return IncomeDetailsPage(titles["incomeDetails"], data);
                   } else {
-                    return ConfirmationPage(titles["confirmation"], {
+                    return ConfirmationPage(titles["confirmation"], const {
                       "success": false,
                       "message": "Error 404",
                       "redirection": "",
@@ -123,7 +123,7 @@ getRouter() {
                     });
                   }
                 } else {
-                  return ConfirmationPage(titles["confirmation"], {
+                  return ConfirmationPage(titles["confirmation"], const {
                     "success": false,
                     "message": "Error 404",
                     "redirection": "",
@@ -174,7 +174,7 @@ getRouter() {
                     return ConfirmationPage(titles["confirmation"], data);
                   } else {
                     /*Manda a la ruta de error*/ return ConfirmationPage(
-                        titles["confirmation"], {
+                        titles["confirmation"], const {
                       "success": false,
                       "message": "Error 404",
                       "redirection": "",
@@ -182,7 +182,7 @@ getRouter() {
                     });
                   }
                 } else {
-                  return ConfirmationPage(titles["confirmation"], {
+                  return ConfirmationPage(titles["confirmation"], const {
                     "success": false,
                     "message": "Error 404",
                     "redirection": "",

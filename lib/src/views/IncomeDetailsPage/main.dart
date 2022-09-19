@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_inventary/src/views/IncomeDetailsPage/components/data_details.dart';
 
 class IncomeDetailsPage extends StatelessWidget {
@@ -10,7 +9,7 @@ class IncomeDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(title: Text(title)),
       body: Column(
-        children: <Widget>[
+        children: const <Widget>[
           Expanded(child: DataDetails()),
         ],
       ));
