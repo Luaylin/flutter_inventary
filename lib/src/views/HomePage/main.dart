@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inventary/src/controller/httpRequest/main.dart';
 import 'package:flutter_inventary/src/router/main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -11,35 +12,54 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-  List<List<String>> content = [
-    ["1", "2", "3", "1", "2", "3"],
-    ["1", "2", "3", "1", "2", "3"],
-    ["1", "2", "3", "1", "2", "3"],
-  ];
+  List<dynamic> content = [];
+  bool flag = false;
+
+  void grow(_content) {
+    setState(() {
+      content = _content;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (!flag) {
+      sendGetHTTPRequest('', '').then((value) {
+        if (value["status"]) {
+          grow(value["data"]);
+          flag = true;
+        }
+      });
+    }
     final DataTableSource _data = MyData(content, context);
     return Scaffold(
+        drawer: Drawer(
+            child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+                decoration: BoxDecoration(color: Colors.blue),
+                child: Text("Header")),
+            ListTile(
+              title: const Text("Registrar Ingresos"),
+              onTap: () {
+                context.go('/${routes["incomeMovement"]}');
+              },
+            ),
+            ListTile(
+              title: const Text("Registrar Salidas"),
+              onTap: () {
+                context.go('/${routes["incomeDetails"]}');
+              },
+            )
+          ],
+        )),
         appBar: AppBar(title: Text(widget.title)),
         body: Container(
           margin: const EdgeInsets.only(
               top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
           child: Column(
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  ElevatedButton(
-                    onPressed: () => context.go('/${routes["incomeMovement"]}'),
-                    child: const Text('Registrar Ingresos'),
-                  ),
-                  const SizedBox(width: 30),
-                  ElevatedButton(
-                    onPressed: () async =>
-                        context.go('/${routes["incomeDetails"]}'),
-                    child: const Text('Registrar Salidas'),
-                  )
-                ],
-              ),
               Form(
                   child: Column(
                 children: <Widget>[
@@ -69,7 +89,13 @@ class _HomePage extends State<HomePage> {
                   ),
                   const Text(""),
                   ElevatedButton(
-                    onPressed: () => context.go('/${routes["incomeDetails"]}'),
+                    onPressed: () {
+                      sendGetHTTPRequest('', '').then((value) {
+                        if (value["status"]) {
+                          grow(value["data"]);
+                        }
+                      });
+                    },
                     child: const Text('Filtrar'),
                   ),
                   const Text(""),
@@ -109,17 +135,17 @@ class _HomePage extends State<HomePage> {
 }
 
 class MyData extends DataTableSource {
-  final List<List<String>> _data;
+  final List<dynamic> _data;
   BuildContext context;
   MyData(this._data, this.context);
   @override
   DataRow? getRow(int index) {
     return DataRow(cells: [
-      DataCell(Text(_data[index][0])),
-      DataCell(Text(_data[index][1])),
-      DataCell(Text(_data[index][2])),
-      DataCell(Text(_data[index][3])),
-      DataCell(Text(_data[index][4])),
+      DataCell(Text(_data[index]["order_num"])),
+      DataCell(Text(_data[index]["fullname_user"])),
+      DataCell(Text(_data[index]["unidad_organica"])),
+      DataCell(Text(_data[index]["local"])),
+      DataCell(Text(_data[index]["date"])),
       DataCell(
         Center(
           child: ElevatedButton(

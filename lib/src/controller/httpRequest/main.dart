@@ -21,7 +21,7 @@ Future<Map> sendPostHTTPRequest(String url, String token, Map data) async {
   }
 }
 
-Future<Map> sendGetHTTPRequest(String url, String token, Map data) async {
+Future<Map> sendGetHTTPRequest(String url, String token) async {
   try {
     var response = await http.get(Uri.parse(dotenv.env['API_INVENTARY']! + url),
         headers: <String, String>{
@@ -29,9 +29,9 @@ Future<Map> sendGetHTTPRequest(String url, String token, Map data) async {
           'token': token
         });
     if (response.statusCode == 201 || response.statusCode == 200) {
-      return {"status": true, "data": response.body};
+      return {"status": true, "data": json.decode(response.body)};
     } else {
-      return {"status": false, "data": response.body};
+      return {"status": false, "data": json.decode(response.body)};
     }
   } catch (e) {
     return {"status": false, "data": {}};
