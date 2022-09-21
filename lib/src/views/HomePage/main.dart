@@ -26,7 +26,7 @@ class _HomePage extends State<HomePage> {
     if (!flag) {
       sendGetHTTPRequest('', '').then((value) {
         if (value["status"]) {
-          grow(value["data"]);
+          grow(value["data"]["data"]);
           flag = true;
         }
       });
@@ -141,11 +141,15 @@ class MyData extends DataTableSource {
   @override
   DataRow? getRow(int index) {
     return DataRow(cells: [
-      DataCell(Text(_data[index]["order_num"])),
-      DataCell(Text(_data[index]["fullname_user"])),
-      DataCell(Text(_data[index]["unidad_organica"])),
-      DataCell(Text(_data[index]["local"])),
-      DataCell(Text(_data[index]["date"])),
+      DataCell(Text(_data[index]["uid"] != null ? _data[index]["uid"] : "")),
+      DataCell(Text(
+          _data[index]["fullName"] != null ? _data[index]["fullName"] : "")),
+      DataCell(
+          Text(_data[index]["company"] != null ? _data[index]["company"] : "")),
+      DataCell(Text(_data[index]["dependence"] != null
+          ? _data[index]["dependence"]
+          : "")),
+      DataCell(Text(_data[index]["date"] != null ? _data[index]["date"] : "")),
       DataCell(
         Center(
           child: ElevatedButton(
