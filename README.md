@@ -46,3 +46,10 @@ git push origin *branch*
 
 ## FAQ
 
+## USAGE
+
+![image](https://user-images.githubusercontent.com/54775933/191805484-101f8028-7285-4faf-b92d-107a4aa4d314.png)
+
+![image](https://user-images.githubusercontent.com/54775933/191805983-7a5f6cb4-245d-4fcc-88ec-fe9ed07b323e.png)
+
+![image](https://user-images.githubusercontent.com/54775933/191806480-77a966e6-993d-4322-8c11-6b62d43cb945.png)
