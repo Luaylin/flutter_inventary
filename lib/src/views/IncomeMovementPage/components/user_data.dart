@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inventary/src/controller/httpRequest/main.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_inventary/src/router/main.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
@@ -102,7 +103,7 @@ class UserData extends StatelessWidget {
               format: dateFormat,
               onSaved: (DateTime? value) {
                 if (value != null) {
-                  dataForm["date"] = dateFormat.format(value);
+                  dataForm["date"] = '${dateFormat.format(value)} 00:00:00';
                 } else {
                   dataForm["date"] = "";
                 }
@@ -139,12 +140,23 @@ class UserData extends StatelessWidget {
               ),
               child: Center(
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_key.currentState!.validate()) {
                       _key.currentState!.save();
-                      //Create Query params
-                      context.go(
-                          '/${routes["incomeDetails"]}?${convertMapToQuery(dataForm)}');
+                      var response = await sendPostHTTPRequest('/in', '', {
+                        "company": dataForm["unit"],
+                        "date": dataForm["date"],
+                        "dependence": dataForm["local"],
+                        "dni": dataForm["document"],
+                        "email": dataForm["email"],
+                        "fullName": dataForm["fullname"],
+                        "reference": dataForm["reference"],
+                        "uid": dataForm["cod"]
+                      });
+                      if (response["status"]) {
+                        context.go(
+                            '/${routes["incomeDetails"]}?${convertMapToQuery(dataForm)}');
+                      }
                     }
                   },
                   child: const Text('Iniciar Registro de listado'),
