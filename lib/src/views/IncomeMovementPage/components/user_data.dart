@@ -25,114 +25,148 @@ class UserData extends StatelessWidget {
         key: _key,
         child: Column(
           children: [
-            //Fullname
-            TextFormField(
-              decoration: const InputDecoration(
-                icon: Icon(Icons.person_pin_outlined),
-                labelText: 'Nombres y Apellidos *',
-              ),
-              onSaved: (String? value) {
-                dataForm["fullname"] = value;
-              },
-              validator: (String? value) {
-                return validateSimpleInputString(value);
-              },
+            Row(
+              children: [
+                Flexible(
+                  child:
+                      //Fullname
+                      TextFormField(
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.person_pin_outlined),
+                      labelText: 'Nombres y Apellidos *',
+                    ),
+                    onSaved: (String? value) {
+                      dataForm["fullname"] = value;
+                    },
+                    validator: (String? value) {
+                      return validateSimpleInputString(value);
+                    },
+                  ),
+                ),
+                Flexible(
+                  child: //Document
+                      TextFormField(
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.badge_outlined),
+                      labelText: 'DNI *',
+                    ),
+                    onSaved: (String? value) {
+                      dataForm["document"] = value;
+                    },
+                    validator: (String? value) {
+                      return validateDNIInput(value);
+                    },
+                  ),
+                )
+              ],
             ),
-            //Document
-            TextFormField(
-              decoration: const InputDecoration(
-                icon: Icon(Icons.badge_outlined),
-                labelText: 'DNI *',
-              ),
-              onSaved: (String? value) {
-                dataForm["document"] = value;
-              },
-              validator: (String? value) {
-                return validateDNIInput(value);
-              },
+            Row(
+              children: [
+                Flexible(
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.email),
+                      labelText: 'Correo Electronico *',
+                    ),
+                    onSaved: (String? value) {
+                      dataForm["email"] = value;
+                    },
+                    validator: (String? value) {
+                      return validateEmailInput(value);
+                    },
+                  ),
+                ),
+                Flexible(
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.account_balance_outlined),
+                      labelText: 'Organo o Unidad Organica *',
+                    ),
+                    onSaved: (String? value) {
+                      dataForm["unit"] = value;
+                    },
+                    validator: (String? value) {
+                      return validateSimpleInputString(value);
+                    },
+                  ),
+                )
+              ],
             ),
-            TextFormField(
-              decoration: const InputDecoration(
-                icon: Icon(Icons.email),
-                labelText: 'Correo Electronico *',
-              ),
-              onSaved: (String? value) {
-                dataForm["email"] = value;
-              },
-              validator: (String? value) {
-                return validateEmailInput(value);
-              },
+            Row(
+              children: [
+                Flexible(
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.add_location),
+                      labelText: 'Local o Sede *',
+                    ),
+                    onSaved: (String? value) {
+                      dataForm["local"] = value;
+                    },
+                    validator: (String? value) {
+                      return validateSimpleInputString(value);
+                    },
+                  ),
+                ),
+                Flexible(
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.abc),
+                      labelText: 'Referencia *',
+                    ),
+                    onSaved: (String? value) {
+                      dataForm["reference"] = value;
+                    },
+                    validator: (String? value) {
+                      return validateSimpleInputString(value);
+                    },
+                  ),
+                )
+              ],
             ),
-            TextFormField(
-              decoration: const InputDecoration(
-                icon: Icon(Icons.account_balance_outlined),
-                labelText: 'Organo o Unidad Organica *',
-              ),
-              onSaved: (String? value) {
-                dataForm["unit"] = value;
-              },
-              validator: (String? value) {
-                return validateSimpleInputString(value);
-              },
-            ),
-            TextFormField(
-              decoration: const InputDecoration(
-                icon: Icon(Icons.add_location),
-                labelText: 'Local o Sede *',
-              ),
-              onSaved: (String? value) {
-                dataForm["local"] = value;
-              },
-              validator: (String? value) {
-                return validateSimpleInputString(value);
-              },
-            ),
-            TextFormField(
-              decoration: const InputDecoration(
-                icon: Icon(Icons.abc),
-                labelText: 'Referencia *',
-              ),
-              onSaved: (String? value) {
-                dataForm["reference"] = value;
-              },
-              validator: (String? value) {
-                return validateSimpleInputString(value);
-              },
-            ),
-            DateTimeField(
-              format: dateFormat,
-              onSaved: (DateTime? value) {
-                if (value != null) {
-                  dataForm["date"] = '${dateFormat.format(value)} 00:00:00';
-                } else {
-                  dataForm["date"] = "";
-                }
-              },
-              validator: (DateTime? value) {
-                return validateCompleteDateTimeInput(value);
-              },
-              decoration: const InputDecoration(
-                  icon: Icon(Icons.calendar_month_outlined),
-                  labelText: "Fecha de Movimiento *"),
-              onShowPicker: (context, currentValue) {
-                return showDatePicker(
-                    context: context,
-                    firstDate: DateTime(1900),
-                    initialDate: currentValue ?? DateTime.now(),
-                    lastDate: DateTime(2100));
-              },
-            ),
-            TextFormField(
-              decoration: const InputDecoration(
-                icon: Icon(Icons.qr_code),
-                labelText: 'Codigo de Registro *',
-              ),
-              onSaved: (String? value) {
-                dataForm["cod"] = value;
-              },
-              validator: (String? value) {
-                return validateSimpleInputString(value);
-              },
+            Row(
+              children: [
+                Flexible(
+                  child: DateTimeField(
+                    format: dateFormat,
+                    onSaved: (DateTime? value) {
+                      if (value != null) {
+                        dataForm["date"] =
+                            '${dateFormat.format(value)} 00:00:00';
+                      } else {
+                        dataForm["date"] = "";
+                      }
+                    },
+                    validator: (DateTime? value) {
+                      return validateCompleteDateTimeInput(value);
+                    },
+                    decoration: const InputDecoration(
+                        icon: Icon(Icons.calendar_month_outlined),
+                        labelText: "Fecha de Movimiento *"),
+                    onShowPicker: (context, currentValue) {
+                      return showDatePicker(
+                          context: context,
+                          firstDate: DateTime(1900),
+                          initialDate: currentValue ?? DateTime.now(),
+                          lastDate: DateTime(2100));
+                    },
+                  ),
+                ),
+                Flexible(
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.qr_code),
+                      labelText: 'Codigo de Registro *',
+                    ),
+                    onSaved: (String? value) {
+                      dataForm["cod"] = value;
+                    },
+                    validator: (String? value) {
+                      return validateSimpleInputString(value);
+                    },
+                  ),
+                )
+              ],
             ),
             Container(
               margin: const EdgeInsets.only(

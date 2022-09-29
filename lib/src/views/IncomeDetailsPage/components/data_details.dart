@@ -105,110 +105,142 @@ class _DataDetails extends State<DataDetails> {
         key: _key,
         child: Column(
           children: [
-            TextFormField(
-              controller: txt[0],
-              decoration: const InputDecoration(
-                icon: Icon(Icons.branding_watermark_rounded),
-                labelText: 'Codigo Patrimonial',
-              ),
-              onSaved: (String? value) {
-                data["patrimonial"] =
-                    value == null || value == "" ? "S/C" : value;
-              },
-              validator: (String? value) {
-                return null;
-              },
+            Row(
+              children: [
+                Flexible(
+                  child: TextFormField(
+                    controller: txt[0],
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.branding_watermark_rounded),
+                      labelText: 'Codigo Patrimonial',
+                    ),
+                    onSaved: (String? value) {
+                      data["patrimonial"] =
+                          value == null || value == "" ? "S/C" : value;
+                    },
+                    validator: (String? value) {
+                      return null;
+                    },
+                  ),
+                ),
+                Flexible(
+                  child: TextFormField(
+                    controller: txt[1],
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.abc),
+                      labelText: 'Denominación *',
+                    ),
+                    onSaved: (String? value) {
+                      data["denomination"] = value;
+                    },
+                    validator: (String? value) {
+                      return validateSimpleInputString(value);
+                    },
+                  ),
+                )
+              ],
             ),
-            TextFormField(
-              controller: txt[1],
-              decoration: const InputDecoration(
-                icon: Icon(Icons.abc),
-                labelText: 'Denominación *',
-              ),
-              onSaved: (String? value) {
-                data["denomination"] = value;
-              },
-              validator: (String? value) {
-                return validateSimpleInputString(value);
-              },
+            Row(
+              children: [
+                Flexible(
+                  child: TextFormField(
+                    controller: txt[2],
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.add_chart_outlined),
+                      labelText: 'Marca',
+                    ),
+                    onSaved: (String? value) {
+                      data["mark"] = value;
+                    },
+                    validator: (String? value) {
+                      return null;
+                    },
+                  ),
+                ),
+                Flexible(
+                  child: TextFormField(
+                    controller: txt[3],
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.model_training),
+                      labelText: 'Modelo',
+                    ),
+                    onSaved: (String? value) {
+                      data["model"] = value;
+                    },
+                    validator: (String? value) {
+                      return null;
+                    },
+                  ),
+                )
+              ],
             ),
-            TextFormField(
-              controller: txt[2],
-              decoration: const InputDecoration(
-                icon: Icon(Icons.add_chart_outlined),
-                labelText: 'Marca',
-              ),
-              onSaved: (String? value) {
-                data["mark"] = value;
-              },
-              validator: (String? value) {
-                return null;
-              },
+            Row(
+              children: [
+                Flexible(
+                  child: TextFormField(
+                    controller: txt[4],
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.color_lens),
+                      labelText: 'Color *',
+                    ),
+                    onSaved: (String? value) {
+                      data["color"] = value;
+                    },
+                    validator: (String? value) {
+                      return validateSimpleInputString(value);
+                    },
+                  ),
+                ),
+                Flexible(
+                  child: TextFormField(
+                    controller: txt[5],
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.qr_code_scanner),
+                      labelText: 'Serie',
+                    ),
+                    onSaved: (String? value) {
+                      data["serie"] = value;
+                    },
+                    validator: (String? value) {
+                      return null;
+                    },
+                  ),
+                )
+              ],
             ),
-            TextFormField(
-              controller: txt[3],
-              decoration: const InputDecoration(
-                icon: Icon(Icons.model_training),
-                labelText: 'Modelo',
-              ),
-              onSaved: (String? value) {
-                data["model"] = value;
-              },
-              validator: (String? value) {
-                return null;
-              },
-            ),
-            TextFormField(
-              controller: txt[4],
-              decoration: const InputDecoration(
-                icon: Icon(Icons.color_lens),
-                labelText: 'Color *',
-              ),
-              onSaved: (String? value) {
-                data["color"] = value;
-              },
-              validator: (String? value) {
-                return validateSimpleInputString(value);
-              },
-            ),
-            TextFormField(
-              controller: txt[5],
-              decoration: const InputDecoration(
-                icon: Icon(Icons.qr_code_scanner),
-                labelText: 'Serie',
-              ),
-              onSaved: (String? value) {
-                data["serie"] = value;
-              },
-              validator: (String? value) {
-                return null;
-              },
-            ),
-            TextFormField(
-              controller: txt[6],
-              decoration: const InputDecoration(
-                icon: Icon(Icons.error_outline_sharp),
-                labelText: 'Otros',
-              ),
-              onSaved: (String? value) {
-                data["others"] = value;
-              },
-              validator: (String? value) {
-                return null;
-              },
-            ),
-            TextFormField(
-              controller: txt[7],
-              decoration: const InputDecoration(
-                icon: Icon(Icons.abc),
-                labelText: 'Conser.',
-              ),
-              onSaved: (String? value) {
-                data["conservation"] = value;
-              },
-              validator: (String? value) {
-                return null;
-              },
+            Row(
+              children: [
+                Flexible(
+                  child: TextFormField(
+                    controller: txt[6],
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.error_outline_sharp),
+                      labelText: 'Otros',
+                    ),
+                    onSaved: (String? value) {
+                      data["others"] = value;
+                    },
+                    validator: (String? value) {
+                      return null;
+                    },
+                  ),
+                ),
+                Flexible(
+                  child: TextFormField(
+                    controller: txt[7],
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.abc),
+                      labelText: 'Conser.',
+                    ),
+                    onSaved: (String? value) {
+                      data["conservation"] = value;
+                    },
+                    validator: (String? value) {
+                      return null;
+                    },
+                  ),
+                )
+              ],
             ),
             TextFormField(
               controller: txt[8],

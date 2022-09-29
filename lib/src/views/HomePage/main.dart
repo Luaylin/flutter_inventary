@@ -24,11 +24,13 @@ class _HomePage extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (!flag) {
-      sendGetHTTPRequest('', '').then((value) {
-        if (value["status"]) {
-          grow(value["data"]["data"]);
-          flag = true;
-        }
+      sendGetHTTPRequest('0/0', 'a').then((value) {
+        sendGetHTTPRequest('0/${value["data"]["size"]}', 'asd').then((value2) {
+          if (value2["status"]) {
+            grow(value2["data"]["data"]);
+            flag = true;
+          }
+        });
       });
     }
     final DataTableSource _data = MyData(content, context);
@@ -63,29 +65,45 @@ class _HomePage extends State<HomePage> {
               Form(
                   child: Column(
                 children: <Widget>[
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.abc),
-                      labelText: 'Codigo de Registro',
-                    ),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.abc),
+                            labelText: 'Codigo de Registro',
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.abc),
+                            labelText: 'DNI Usuario',
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.abc),
-                      labelText: 'DNI Usuario',
-                    ),
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.abc),
-                      labelText: 'Nombres y Apellidos de Usuario',
-                    ),
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.abc),
-                      labelText: 'Fecha de registro',
-                    ),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.abc),
+                            labelText: 'Nombres y Apellidos de Usuario',
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.abc),
+                            labelText: 'Fecha de registro',
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                   const Text(""),
                   ElevatedButton(
