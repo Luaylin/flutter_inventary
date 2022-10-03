@@ -5,10 +5,14 @@ import 'package:go_router/go_router.dart';
 import 'package:data_table_2/data_table_2.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({this.title = ''});
+
   final String title;
+
+  const HomePage({this.title = ''});
+
   @override
   State<HomePage> createState() => _HomePage();
+
 }
 
 class _HomePage extends State<HomePage> {
@@ -34,6 +38,7 @@ class _HomePage extends State<HomePage> {
       });
     }
     final DataTableSource _data = MyData(content, context);
+    TextStyle ts=TextStyle(color: Colors.white);
     return Scaffold(
         drawer: Drawer(
             child: ListView(
@@ -43,27 +48,48 @@ class _HomePage extends State<HomePage> {
                 decoration: BoxDecoration(color: Colors.blue),
                 child: Text("Header")),
             ListTile(
-              title: const Text("Registrar Ingresos"),
+              leading: new Icon(Icons.table_chart),
+              title: const Text("Ingresos"),
               onTap: () {
-                context.go('/${routes["incomeMovement"]}');
+                context.go('/' + routes["ins"]);
               },
             ),
+            Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: ListTile(
+                  leading: new Icon(Icons.add),
+                  title: const Text("Crear"),
+                  onTap: () {
+                    context.go('/' + routes["in_create"]);
+                  },
+                )),
             ListTile(
-              title: const Text("Registrar Salidas"),
+              leading: new Icon(Icons.table_chart),
+              title: const Text("Salidas"),
               onTap: () {
-                context.go('/${routes["incomeDetails"]}');
+                context.go('/' + routes["outs"]);
               },
-            )
+            ),
+            Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: ListTile(
+                  leading: new Icon(Icons.add),
+                  title: const Text("Crear"),
+                  onTap: () {
+                    context.go('/' + routes["outs_create"]);
+                  },
+                )),
           ],
         )),
         appBar: AppBar(title: Text(widget.title)),
+        floatingActionButton: FloatingActionButton(
+            child: const Icon(Icons.add),
+            onPressed: () {context.go('/in/create');}
+        ),
         body: Container(
-          margin: const EdgeInsets.only(
-              top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
           child: Column(
-            children: <Widget>[
-              Form(
-                  child: Column(
+            children:[
+              Form(child: Column(
                 children: <Widget>[
                   Row(
                     children: [
@@ -119,33 +145,31 @@ class _HomePage extends State<HomePage> {
                   const Text(""),
                 ],
               )),
-              Expanded(
-                  child: PaginatedDataTable2(columns: const [
-                DataColumn(
-                    label: Center(
-                  child: Text('Código de Registro'),
-                )),
-                DataColumn(
-                    label: Center(
-                  child: Text('Usuario'),
-                )),
-                DataColumn(
-                    label: Center(
-                  child: Text('Organo o Unidad Organica'),
-                )),
-                DataColumn(
-                    label: Center(
-                  child: Text('Local o Sede'),
-                )),
-                DataColumn(
-                    label: Center(
-                  child: Text('Fecha'),
-                )),
-                DataColumn(
-                    label: Center(
-                  child: Text('Acciones'),
-                )),
-              ], source: _data))
+              Expanded(child: PaginatedDataTable2(
+                  headingRowColor: MaterialStateProperty.resolveWith(
+                      (states) => Colors.black),
+                  columns:[
+                    DataColumn(
+                        label: Center(child: Text('Código de Registro',style:ts))
+                    ),
+                    DataColumn(
+                        label: Center(child: Text('Usuario',style:ts))
+                    ),
+                    DataColumn(
+                        label: Center(child: Text('Organo o Unidad Organica',style:ts))
+                    ),
+                    DataColumn(
+                        label: Center(child: Text('Local o Sede',style:ts))
+                    ),
+                    DataColumn(
+                        label: Center(child: Text('Fecha',style:ts))
+                    ),
+                    DataColumn(
+                        label: Center(child: Text('Acciones',style:ts))
+                    ),
+                  ],
+                  source: _data
+              ))
             ],
           ),
         ));

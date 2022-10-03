@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inventary/src/views/IncomeMovementPage/detail_screen.dart';
 import 'package:go_router/go_router.dart';
+
 //HomePage
 import 'package:flutter_inventary/src/views/HomePage/main.dart';
 //DetailsPage
@@ -20,10 +22,12 @@ import 'package:flutter_inventary/src/views/ConfirmationPage/main.dart';
 Map routes = {
   "home": "/",
   "details": "details",
-  "movement": "movement",
-  "incomeMovement": "income_movement",
-  "incomeDetails": "income_details",
-  "outputMovement": "output_movement",
+  "ins": "in",
+  "in_create": "in/create",
+  "in_detail_create": "in/:id/detail/create",
+  "out_create": "out/create",
+  "out": "out/:id",
+  "outs": "out",
   "outputDetails": "output_details",
   "confirmation": "confirmation"
 };
@@ -43,31 +47,40 @@ getRouter() {
   return GoRouter(
     routes: <GoRoute>[
       GoRoute(
-        path: routes["home"],
-        builder: (BuildContext context, GoRouterState state) =>
-            HomePage(title: titles["home"]),
+        path: "/",
+        builder: (BuildContext context, GoRouterState state) =>HomePage(title: "home"),
         routes: <GoRoute>[
           //Detalles
           GoRoute(
-            path: routes["details"],
+            path: "details",
             builder: (BuildContext context, GoRouterState state) =>
-                DetailsPage(titles["details"]),
+                DetailsPage("details"),
           ),
           //Detalles
           GoRoute(
-            path: routes["movement"],
+            path:'in/:id/detail/create',
             builder: (BuildContext context, GoRouterState state) =>
-                MovementPage(titles["movement"]),
+                DetailFragment(movementId:int.parse(state.params['id']!))
+          ),
+          GoRoute(
+            path: routes["ins"],
+            builder: (BuildContext context, GoRouterState state) =>
+                HomePage(title:"Ingresos"),
           ),
           //Detalles
           GoRoute(
-            path: routes["incomeMovement"],
+            path: "in/create",
             builder: (BuildContext context, GoRouterState state) =>
-                IncomeMovementPage(titles["incomeMovement"]),
+                IncomeMovementPage("Crear Ingreso"),
+          ),
+          GoRoute(
+            path: "in/:id",
+            builder: (BuildContext context, GoRouterState state) =>
+                IncomeMovementPage("Ver Ingreso",id:int.parse(state.params['id']!)),
           ),
           //Detalles
           GoRoute(
-              path: routes["incomeDetails"],
+              path: "incomeDetails",
               builder: (BuildContext context, GoRouterState state) {
                 final query = state.queryParametersAll;
                 final Map data = {
@@ -133,19 +146,19 @@ getRouter() {
               }),
           //Detalles
           GoRoute(
-            path: routes["outputMovement"],
+            path: "out",
             builder: (BuildContext context, GoRouterState state) =>
-                OutputMovementPage(titles["outputMovement"]),
+                HomePage(title:"Salidas"),
           ),
           //Detalles
           GoRoute(
-            path: routes["outputDetails"],
+            path: "outputDetails",
             builder: (BuildContext context, GoRouterState state) =>
-                OutputDetailsPage(titles["outputDetails"]),
+                OutputDetailsPage("outputDetails"),
           ),
           //Detalles
           GoRoute(
-              path: routes["confirmation"],
+              path: "confirmation",
               builder: (BuildContext context, GoRouterState state) {
                 final query = state.queryParametersAll;
                 final Map data = {
@@ -182,7 +195,7 @@ getRouter() {
                     });
                   }
                 } else {
-                  return ConfirmationPage(titles["confirmation"], const {
+                  return ConfirmationPage("confirmation", const {
                     "success": false,
                     "message": "Error 404",
                     "redirection": "",
