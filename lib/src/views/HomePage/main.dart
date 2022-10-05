@@ -5,14 +5,12 @@ import 'package:go_router/go_router.dart';
 import 'package:data_table_2/data_table_2.dart';
 
 class HomePage extends StatefulWidget {
-
   final String title;
 
   const HomePage({this.title = ''});
 
   @override
   State<HomePage> createState() => _HomePage();
-
 }
 
 class _HomePage extends State<HomePage> {
@@ -30,15 +28,15 @@ class _HomePage extends State<HomePage> {
     if (!flag) {
       sendGetHTTPRequest('0/0', 'a').then((value) {
         sendGetHTTPRequest('0/${value["data"]["size"]}', 'asd').then((value2) {
+          grow(value2["data"]["data"]);
           if (value2["status"]) {
-            grow(value2["data"]["data"]);
             flag = true;
           }
         });
       });
     }
     final DataTableSource _data = MyData(content, context);
-    TextStyle ts=TextStyle(color: Colors.white);
+    TextStyle ts = TextStyle(color: Colors.white);
     return Scaffold(
         drawer: Drawer(
             child: ListView(
@@ -84,12 +82,14 @@ class _HomePage extends State<HomePage> {
         appBar: AppBar(title: Text(widget.title)),
         floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.add),
-            onPressed: () {context.go('/in/create');}
-        ),
+            onPressed: () {
+              context.go('/in/create');
+            }),
         body: Container(
           child: Column(
-            children:[
-              Form(child: Column(
+            children: [
+              Form(
+                  child: Column(
                 children: <Widget>[
                   Row(
                     children: [
@@ -145,31 +145,29 @@ class _HomePage extends State<HomePage> {
                   const Text(""),
                 ],
               )),
-              Expanded(child: PaginatedDataTable2(
-                  headingRowColor: MaterialStateProperty.resolveWith(
-                      (states) => Colors.black),
-                  columns:[
-                    DataColumn(
-                        label: Center(child: Text('Código de Registro',style:ts))
-                    ),
-                    DataColumn(
-                        label: Center(child: Text('Usuario',style:ts))
-                    ),
-                    DataColumn(
-                        label: Center(child: Text('Organo o Unidad Organica',style:ts))
-                    ),
-                    DataColumn(
-                        label: Center(child: Text('Local o Sede',style:ts))
-                    ),
-                    DataColumn(
-                        label: Center(child: Text('Fecha',style:ts))
-                    ),
-                    DataColumn(
-                        label: Center(child: Text('Acciones',style:ts))
-                    ),
-                  ],
-                  source: _data
-              ))
+              Expanded(
+                  child: PaginatedDataTable2(
+                      headingRowColor: MaterialStateProperty.resolveWith(
+                          (states) => Colors.black),
+                      columns: [
+                        DataColumn(
+                            label: Center(
+                                child: Text('Código de Registro', style: ts))),
+                        DataColumn(
+                            label: Center(child: Text('Usuario', style: ts))),
+                        DataColumn(
+                            label: Center(
+                                child: Text('Organo o Unidad Organica',
+                                    style: ts))),
+                        DataColumn(
+                            label:
+                                Center(child: Text('Local o Sede', style: ts))),
+                        DataColumn(
+                            label: Center(child: Text('Fecha', style: ts))),
+                        DataColumn(
+                            label: Center(child: Text('Acciones', style: ts))),
+                      ],
+                      source: _data))
             ],
           ),
         ));
@@ -195,7 +193,7 @@ class MyData extends DataTableSource {
       DataCell(
         Center(
           child: ElevatedButton(
-            onPressed: () => context.go('/${routes["movement"]}'),
+            onPressed: () => context.go('/in/${_data[index]["id"]}'),
             child: const Text('Visualizar'),
           ),
         ),

@@ -12,9 +12,9 @@ Future<Map> sendPostHTTPRequest(String url, String token, Map data) async {
             },
             body: json.encode(data));
     if (response.statusCode == 201 || response.statusCode == 200) {
-      return {"status": true, "data": response.body};
+      return {"status": true, "data": json.decode(response.body)};
     } else {
-      return {"status": false, "data": response.body};
+      return {"status": false, "data": json.decode(response.body)};
     }
   } catch (e) {
     return {"status": false, "data": {}};

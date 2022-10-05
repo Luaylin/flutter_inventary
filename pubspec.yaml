@@ -43,6 +43,8 @@ dependencies:
   datetime_picker_formfield: ^2.0.1
   http: ^0.13.5
   flutter_dotenv: ^5.0.2
+  modal_bottom_sheet: ^2.1.2
+  adaptive_dialog: ^1.8.0+1
 
 dev_dependencies:
   flutter_test:

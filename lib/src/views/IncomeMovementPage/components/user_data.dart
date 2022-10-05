@@ -9,7 +9,6 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:collection/collection.dart';
 
 class UserData extends StatelessWidget {
-
   final dateFormat = DateFormat("yyyy-MM-dd");
 
   Axis orientation = Axis.vertical;
@@ -49,17 +48,17 @@ class UserData extends StatelessWidget {
       return o != null ? o.toString() : '';
     }
 
-    List _selected = [];
-    for (var i = 0; i < 10; i++) {
-      _data.add({
-        'id': (i + 1).toString(),
-        'denomination': 'denomination-' + str(i + 1),
-        'marca': 'marca ' + i.toString(),
-        'model': 'modelo ' + i.toString(),
-        'color': 'green'
+    if (id != null) {
+      print(id);
+      //Completa los datos del formulario y obtiene los detalles
+      sendGetHTTPRequest('${id}', 'asd').then((value2) {
+        if (value2["status"]) {
+          _data = value2["data"]["details"];
+        }
       });
-      _selected.add(false);
     }
+
+    List _selected = [];
 
     return OrientationBuilder(builder: (context, orientation) {
       isScreenWide = MediaQuery.of(context).size.width >= 500;
@@ -219,8 +218,7 @@ class UserData extends StatelessWidget {
                                   "uid": dataForm["cod"]
                                 });
                                 if (response["status"]) {
-                                  context.go(
-                                      '/${routes["incomeDetails"]}?${convertMapToQuery(dataForm)}');
+                                  context.go('/in/${response["data"]["id"]}');
                                 }
                               }
                             },
