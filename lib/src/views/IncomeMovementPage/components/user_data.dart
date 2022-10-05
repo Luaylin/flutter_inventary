@@ -8,14 +8,29 @@ import 'package:go_router/go_router.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:collection/collection.dart';
 
-class UserData extends StatelessWidget {
+class UserData extends StatefulWidget {
+  const UserData({super.key, this.id});
+  final int? id;
+  @override
+  State<UserData> createState() => _UserDataState();
+}
+
+class _UserDataState extends State<UserData> {
   final dateFormat = DateFormat("yyyy-MM-dd");
+  List<TextEditingController> txt = [
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+  ];
 
   Axis orientation = Axis.vertical;
 
-  int? id;
-
-  UserData({this.id});
+  bool flag = false;
 
   final Map dataForm = {
     "fullname": "",
@@ -27,6 +42,26 @@ class UserData extends StatelessWidget {
     "date": "",
     "cod": ""
   };
+
+  List _data = [];
+  List _selected = [];
+
+  void grow(data) {
+    setState(() {
+      _selected = [];
+      _data = data["details"];
+      txt[0].text = data["dni"].toString();
+      txt[1].text = data["fullName"].toString();
+      txt[2].text = data["email"].toString();
+      txt[3].text = data["company"].toString();
+      txt[4].text = data["dependence"].toString();
+      txt[5].text = data["reference"].toString();
+      txt[6].text = data["date"]
+          .toString()
+          .substring(0, data["date"].toString().length - 9);
+      txt[7].text = data["uid"].toString();
+    });
+  }
 
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
@@ -43,22 +78,21 @@ class UserData extends StatelessWidget {
       return Flex(direction: Axis.vertical, children: children);
     }
 
-    List _data = [];
     String str(o) {
       return o != null ? o.toString() : '';
     }
 
-    if (id != null) {
-      print(id);
+    if (widget.id != null) {
       //Completa los datos del formulario y obtiene los detalles
-      sendGetHTTPRequest('${id}', 'asd').then((value2) {
-        if (value2["status"]) {
-          _data = value2["data"]["details"];
-        }
-      });
+      if (!flag) {
+        sendGetHTTPRequest('${widget.id}', 'asd').then((value2) {
+          if (value2["status"]) {
+            grow(value2["data"]);
+            flag = true;
+          }
+        });
+      }
     }
-
-    List _selected = [];
 
     return OrientationBuilder(builder: (context, orientation) {
       isScreenWide = MediaQuery.of(context).size.width >= 500;
@@ -75,6 +109,7 @@ class UserData extends StatelessWidget {
                     Flex2(
                       [
                         TextFormField(
+                          controller: txt[0],
                           decoration: const InputDecoration(
                             icon: Icon(Icons.badge_outlined),
                             labelText: 'DNI *',
@@ -88,6 +123,7 @@ class UserData extends StatelessWidget {
                         ),
                         //Fullname
                         TextFormField(
+                          controller: txt[1],
                           decoration: const InputDecoration(
                             icon: Icon(Icons.person_pin_outlined),
                             labelText: 'Nombres y Apellidos *',
@@ -104,6 +140,7 @@ class UserData extends StatelessWidget {
                     Flex2(
                       [
                         TextFormField(
+                          controller: txt[2],
                           decoration: const InputDecoration(
                             icon: Icon(Icons.email),
                             labelText: 'Correo Electronico *',
@@ -116,6 +153,7 @@ class UserData extends StatelessWidget {
                           },
                         ),
                         TextFormField(
+                          controller: txt[3],
                           decoration: const InputDecoration(
                             icon: Icon(Icons.account_balance_outlined),
                             labelText: 'Organo o Unidad Organica *',
@@ -132,6 +170,7 @@ class UserData extends StatelessWidget {
                     Flex2(
                       [
                         TextFormField(
+                          controller: txt[4],
                           decoration: const InputDecoration(
                             icon: Icon(Icons.add_location),
                             labelText: 'Local o Sede *',
@@ -144,6 +183,7 @@ class UserData extends StatelessWidget {
                           },
                         ),
                         TextFormField(
+                          controller: txt[5],
                           decoration: const InputDecoration(
                             icon: Icon(Icons.abc),
                             labelText: 'Referencia *',
@@ -160,6 +200,7 @@ class UserData extends StatelessWidget {
                     Flex2(
                       [
                         DateTimeField(
+                          controller: txt[6],
                           format: dateFormat,
                           onSaved: (DateTime? value) {
                             if (value != null) {
@@ -184,6 +225,7 @@ class UserData extends StatelessWidget {
                           },
                         ),
                         TextFormField(
+                          controller: txt[7],
                           decoration: const InputDecoration(
                             icon: Icon(Icons.qr_code),
                             labelText: 'Codigo de Registro *',
@@ -247,28 +289,29 @@ class UserData extends StatelessWidget {
                       DataColumn(label: Text('Modelo')),
                       DataColumn(label: Text('Color')),
                     ],
-                    rows: _data
-                        .mapIndexed((index, item) => DataRow(
-                                cells: [
-                                  DataCell(Text(str(index + 1))),
-                                  DataCell(Text(str(item['codePatrimonial']))),
-                                  DataCell(Text(str(item['denomination']))),
-                                  DataCell(Text(str(item['marca']))),
-                                  DataCell(Text(str(item['model']))),
-                                  DataCell(Text(str(item['color'])))
-                                ],
-                                selected: _selected[index],
-                                onSelectChanged: (bool? selected) {
-                                  print(selected);
+                    rows: _data.mapIndexed((index, item) {
+                      _selected.add(false);
+                      return DataRow(
+                          cells: [
+                            DataCell(Text(str(index + 1))),
+                            DataCell(Text(str(item['codePatrimonial']))),
+                            DataCell(Text(str(item['denomination']))),
+                            DataCell(Text(str(item['marca']))),
+                            DataCell(Text(str(item['model']))),
+                            DataCell(Text(str(item['color'])))
+                          ],
+                          selected: _selected[index],
+                          onSelectChanged: (bool? selected) {
+                            print(selected);
 
-                                  ///setState(() {
-                                  // bool old = isSelected();
-                                  _selected[index] = selected!;
-                                  // if (old != isSelected())
-                                  // widget.buildAction!(actions: getActions());
-                                  //});/
-                                }))
-                        .toList(),
+                            ///setState(() {
+                            // bool old = isSelected();
+                            _selected[index] = selected!;
+                            // if (old != isSelected())
+                            // widget.buildAction!(actions: getActions());
+                            //});/
+                          });
+                    }).toList(),
                   ))
             ])))
           ]));

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inventary/src/controller/httpRequest/main.dart';
 import 'package:flutter_inventary/src/utils/main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_inventary/src/views/IncomeMovementPage/components/user_data.dart';
@@ -256,7 +257,38 @@ class IncomeMovementPage extends StatelessWidget {
                                                 child: Row(
                                               children: [
                                                 ElevatedButton(
-                                                  onPressed: () {},
+                                                  onPressed: () async {
+                                                    //Manda a la pagina recargando los nuevos datos
+                                                    if (_key.currentState!
+                                                        .validate()) {
+                                                      _key.currentState!.save();
+                                                      var response =
+                                                          await sendPostHTTPRequest(
+                                                              '/detail',
+                                                              'asd', {
+                                                        "moveId": id,
+                                                        "codePatrimonial":
+                                                            data["patrimonial"],
+                                                        "denomination": data[
+                                                            "denomination"],
+                                                        "marca": data["mark"],
+                                                        "model": data["model"],
+                                                        "color": data["color"],
+                                                        "series": data["serie"],
+                                                        "others":
+                                                            data["others"],
+                                                        "condition": data[
+                                                            "conservation"],
+                                                        "observation": data[
+                                                            "observations"],
+                                                        "canceled": 0
+                                                      });
+                                                      if (response["status"]) {
+                                                        print("Correcto");
+                                                        context.push('/in/$id');
+                                                      }
+                                                    }
+                                                  },
                                                   child: const Text(
                                                       '+ Añadir al listado'),
                                                 ),
