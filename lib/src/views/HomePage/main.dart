@@ -26,8 +26,8 @@ class _HomePage extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (!flag) {
-      sendGetHTTPRequest('0/0', 'a').then((value) {
-        sendGetHTTPRequest('0/${value["data"]["size"]}', 'asd').then((value2) {
+      sendGetHTTPRequest('/0/0', 'a').then((value) {
+        sendGetHTTPRequest('/0/${value["data"]["size"]}', 'asd').then((value2) {
           grow(value2["data"]["data"]);
           if (value2["status"]) {
             flag = true;
