@@ -1,6 +1,12 @@
+import 'dart:html' as html;
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_inventary/main.dart';
+import 'package:flutter_inventary/src/controller/httpRequest/main.dart';
 import 'package:flutter_inventary/src/views/IncomeMovementPage/detail_screen.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 //HomePage
 import 'package:flutter_inventary/src/views/HomePage/main.dart';
@@ -48,7 +54,28 @@ getRouter() {
     routes: <GoRoute>[
       GoRoute(
         path: "/",
-        builder: (BuildContext context, GoRouterState state) =>HomePage(title: "home"),
+        builder: (BuildContext context, GoRouterState state) {
+          dynamic token = storage.getItem("token");
+          print(token);
+          if (token == null) {
+            final query = state.queryParametersAll;
+            dynamic code = query["code"];
+            if (code == null) {
+              html.Location data = html.window.location;
+              data.replace("http://web.regionancash.gob.pe/api/oauth/");
+              return HomePage(title: "error");
+            } else {
+              //Manda la petición al backend
+              sendPostHTTPRequest('token', '', {code: code}).then((value) => {
+                    if (value["status"])
+                      {storage.setItem("token", value["token"])}
+                  });
+              return HomePage(title: "home");
+            }
+          } else {
+            return HomePage(title: "home");
+          }
+        },
         routes: <GoRoute>[
           //Detalles
           GoRoute(
@@ -58,14 +85,13 @@ getRouter() {
           ),
           //Detalles
           GoRoute(
-            path:'in/:id/detail/create',
-            builder: (BuildContext context, GoRouterState state) =>
-                DetailFragment(movementId:int.parse(state.params['id']!))
-          ),
+              path: 'in/:id/detail/create',
+              builder: (BuildContext context, GoRouterState state) =>
+                  DetailFragment(movementId: int.parse(state.params['id']!))),
           GoRoute(
             path: routes["ins"],
             builder: (BuildContext context, GoRouterState state) =>
-                HomePage(title:"Ingresos"),
+                HomePage(title: "Ingresos"),
           ),
           //Detalles
           GoRoute(
@@ -76,7 +102,8 @@ getRouter() {
           GoRoute(
             path: "in/:id",
             builder: (BuildContext context, GoRouterState state) =>
-                IncomeMovementPage("Ver Ingreso",id:int.parse(state.params['id']!)),
+                IncomeMovementPage("Ver Ingreso",
+                    id: int.parse(state.params['id']!)),
           ),
           //Detalles
           GoRoute(
@@ -148,7 +175,7 @@ getRouter() {
           GoRoute(
             path: "out",
             builder: (BuildContext context, GoRouterState state) =>
-                HomePage(title:"Salidas"),
+                HomePage(title: "Salidas"),
           ),
           //Detalles
           GoRoute(

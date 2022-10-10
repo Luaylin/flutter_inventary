@@ -45,6 +45,8 @@ dependencies:
   flutter_dotenv: ^5.0.2
   modal_bottom_sheet: ^2.1.2
   adaptive_dialog: ^1.8.0+1
+  url_launcher: ^6.1.6
+  localstorage: ^4.0.0+1
 
 dev_dependencies:
   flutter_test:
