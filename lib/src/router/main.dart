@@ -70,10 +70,12 @@ getRouter() {
               //Manda la petición al backend
               sendPostHTTPRequest('token', '', {code: code}).then((value) => {
                     if (value["status"])
-                      {storage.setItem("token", value["token"])}
+                      {
+                        storage.setItem("token", value["token"]),
+                        html.window.location
+                            .replace('web.regionancash.gob.pe/admin/inventary/')
+                      }
                   });
-              html.Location data = html.window.location;
-              data.replace('/');
               return HomePage(title: "home");
             }
           } else {
