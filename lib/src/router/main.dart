@@ -1,5 +1,6 @@
 import 'dart:html' as html;
 import 'dart:ui';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_inventary/main.dart';
@@ -62,7 +63,8 @@ getRouter() {
             dynamic code = query["code"];
             if (code == null) {
               html.Location data = html.window.location;
-              data.replace("http://web.regionancash.gob.pe/api/oauth/");
+              data.replace(
+                  '${dotenv.env['OAUTH_URL']}authorize?response_type=code&client_id=${dotenv.env['OAUTH_CLIENT_ID']}&scope=profile');
               return HomePage(title: "error");
             } else {
               //Manda la petición al backend
