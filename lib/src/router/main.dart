@@ -72,6 +72,8 @@ getRouter() {
                     if (value["status"])
                       {storage.setItem("token", value["token"])}
                   });
+              html.Location data = html.window.location;
+              data.replace('/');
               return HomePage(title: "home");
             }
           } else {
