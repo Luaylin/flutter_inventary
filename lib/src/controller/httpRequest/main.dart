@@ -6,7 +6,7 @@ import 'dart:convert';
 Future<Map> sendPostHTTPRequest(String url, String token, Map data) async {
   try {
     var response =
-        await http.post(Uri.parse(dotenv.env['API_INVENTARY']! + '/' + url),
+        await http.post(Uri.parse(dotenv.env['API_INVENTARY']! + url),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'Bearer ${storage.getItem("token")}'
@@ -24,8 +24,7 @@ Future<Map> sendPostHTTPRequest(String url, String token, Map data) async {
 
 Future<Map> sendGetHTTPRequest(String url, String token) async {
   try {
-    var response = await http.get(
-        Uri.parse(dotenv.env['API_INVENTARY']! + '/' + url),
+    var response = await http.get(Uri.parse(dotenv.env['API_INVENTARY']! + url),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer ${storage.getItem("token")}'
@@ -42,13 +41,12 @@ Future<Map> sendGetHTTPRequest(String url, String token) async {
 
 Future<Map> sendPutHTTPRequest(String url, String token, Map data) async {
   try {
-    var response =
-        await http.put(Uri.parse(dotenv.env['API_INVENTARY']! + '/' + url),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-              'Authorization': 'Bearer ${storage.getItem("token")}'
-            },
-            body: json.encode(data));
+    var response = await http.put(Uri.parse(dotenv.env['API_INVENTARY']! + url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${storage.getItem("token")}'
+        },
+        body: json.encode(data));
     if (response.statusCode == 201 || response.statusCode == 200) {
       return {"status": true, "data": response.body};
     } else {
@@ -62,7 +60,7 @@ Future<Map> sendPutHTTPRequest(String url, String token, Map data) async {
 Future<Map> sendDeleteHTTPRequest(String url, String token, Map data) async {
   try {
     var response =
-        await http.delete(Uri.parse(dotenv.env['API_INVENTARY']! + '/' + url),
+        await http.delete(Uri.parse(dotenv.env['API_INVENTARY']! + url),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'Bearer ${storage.getItem("token")}'
