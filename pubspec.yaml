@@ -47,6 +47,7 @@ dependencies:
   adaptive_dialog: ^1.8.0+1
   url_launcher: ^6.1.6
   localstorage: ^4.0.0+1
+  gra_utils: ^0.0.5
 
 dev_dependencies:
   flutter_test:

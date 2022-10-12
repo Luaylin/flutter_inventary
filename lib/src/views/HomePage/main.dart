@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inventary/main.dart';
 import 'package:flutter_inventary/src/controller/httpRequest/main.dart';
 import 'package:flutter_inventary/src/router/main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:gra_utils/gra_utils.dart';
+import 'dart:convert';
+
+import 'package:localstorage/localstorage.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -23,18 +28,27 @@ class _HomePage extends State<HomePage> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (!flag) {
-      sendGetHTTPRequest('0/0', 'a').then((value) {
-        sendGetHTTPRequest('0/${value["data"]["size"]}', 'asd').then((value2) {
-          grow(value2["data"]["data"]);
-          if (value2["status"]) {
-            flag = true;
-          }
+  int _page=0;
+  int _size=0;
+
+  void _getDistricts(int page){
+      http2.get('/$page/20').then((response) {
+        var result= jsonDecode(response.body);
+        setState(() {
+          content=result['data']??[];
+          _size=result['size']??0;
         });
       });
-    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getDistricts(0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final DataTableSource _data = MyData(content, context);
     TextStyle ts = TextStyle(color: Colors.white);
     return Scaffold(
@@ -75,6 +89,16 @@ class _HomePage extends State<HomePage> {
                   title: const Text("Crear"),
                   onTap: () {
                     context.go('/' + routes["outs_create"]);
+                  },
+                )),
+            Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: ListTile(
+                  leading: new Icon(Icons.logout),
+                  title: const Text("Cerrar"),
+                  onTap: () {
+storage.deleteItem('token');
+                    context.go('/');
                   },
                 )),
           ],

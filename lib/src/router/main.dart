@@ -1,7 +1,7 @@
 import 'dart:html' as html;
 import 'dart:ui';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_inventary/main.dart';
 import 'package:flutter_inventary/src/controller/httpRequest/main.dart';
@@ -9,6 +9,7 @@ import 'package:flutter_inventary/src/views/IncomeMovementPage/detail_screen.dar
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:gra_utils/gra_utils.dart';
 //HomePage
 import 'package:flutter_inventary/src/views/HomePage/main.dart';
 //DetailsPage
@@ -25,6 +26,8 @@ import 'package:flutter_inventary/src/views/OutputMovementPage/main.dart';
 import 'package:flutter_inventary/src/views/OutputDetailsPage/main.dart';
 //ConfirmationPage
 import 'package:flutter_inventary/src/views/ConfirmationPage/main.dart';
+
+
 
 Map routes = {
   "home": "/",
@@ -51,36 +54,55 @@ Map titles = {
 };
 
 getRouter() {
+  http2.API_URL='http://web.regionancash.gob.pe/api/inventary';
+  
   return GoRouter(
     routes: <GoRoute>[
       GoRoute(
         path: "/",
         builder: (BuildContext context, GoRouterState state) {
-          dynamic token = storage.getItem("token");
-          print(token);
+          return FutureBuilder(
+      future: storage.ready,
+      builder: (BuildContext context, snapshot) {
+        if (snapshot.data == true) {
+         var token = storage.getItem('token');
+
+          
+      
+           print('as tol='+token.toString());
           if (token == null) {
             final query = state.queryParametersAll;
             dynamic code = query["code"];
+            html.Location location = html.window.location;
             if (code == null) {
-              html.Location data = html.window.location;
-              data.replace(
+              location.replace(
                   '${dotenv.env['OAUTH_URL']}authorize?response_type=code&client_id=${dotenv.env['OAUTH_CLIENT_ID']}&scope=profile');
               return HomePage(title: "error");
             } else {
-              //Manda la petición al backend
-              sendPostHTTPRequest('token', '', {code: code}).then((value) => {
-                    if (value["status"])
-                      {
-                        storage.setItem("token", value["token"]),
-                        html.window.location
-                            .replace('web.regionancash.gob.pe/admin/inventary/')
-                      }
-                  });
+              
+              http2.post('/token',{'code': code[0]}).then((response){
+                    var result= jsonDecode(response.body);
+                    print(response.body);
+                    token=result['access_token'];
+                    if(token!=null){
+                      storage.setItem("token",token);
+                      
+                      html.window.location
+                        .replace('${location.protocol}//${location.host}${location.pathname??''}');
+                    }
+              });
               return HomePage(title: "home");
             }
           } else {
+            http2.headers['Authorization'] = 'Bearer $token';
+            print(http2.headers);
             return HomePage(title: "home");
           }
+            } else {
+          return Text('Loading...');
+        }
+      },
+    );
         },
         routes: <GoRoute>[
           //Detalles
