@@ -229,7 +229,8 @@ class IncomeMovementPage extends StatelessWidget {
                                                         value;
                                                   },
                                                   validator: (String? value) {
-                                                    return null;
+                                                    return validateStringLengthInput(
+                                                        value, 1);
                                                   },
                                                 ),
                                               )

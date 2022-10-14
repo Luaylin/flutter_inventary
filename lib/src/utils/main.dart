@@ -84,3 +84,10 @@ convertMapToList(Map data) {
   return response;
 }
 
+validateStringLengthInput(String? value, int maxLen) {
+  if (value != null && value.length <= maxLen) {
+    return null;
+  } else {
+    return "El campo debe de ser llenado correctamente";
+  }
+}

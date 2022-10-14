@@ -27,8 +27,6 @@ import 'package:flutter_inventary/src/views/OutputDetailsPage/main.dart';
 //ConfirmationPage
 import 'package:flutter_inventary/src/views/ConfirmationPage/main.dart';
 
-
-
 Map routes = {
   "home": "/",
   "details": "details",
@@ -54,55 +52,52 @@ Map titles = {
 };
 
 getRouter() {
-  http2.API_URL='http://web.regionancash.gob.pe/api/inventary';
-  
+  http2.API_URL = 'http://web.regionancash.gob.pe/api/inventary';
+
   return GoRouter(
     routes: <GoRoute>[
       GoRoute(
         path: "/",
         builder: (BuildContext context, GoRouterState state) {
           return FutureBuilder(
-      future: storage.ready,
-      builder: (BuildContext context, snapshot) {
-        if (snapshot.data == true) {
-         var token = storage.getItem('token');
+            future: storage.ready,
+            builder: (BuildContext context, snapshot) {
+              if (snapshot.data == true) {
+                var token = storage.getItem('token');
 
-          
-      
-           print('as tol='+token.toString());
-          if (token == null) {
-            final query = state.queryParametersAll;
-            dynamic code = query["code"];
-            html.Location location = html.window.location;
-            if (code == null) {
-              location.replace(
-                  '${dotenv.env['OAUTH_URL']}authorize?response_type=code&client_id=${dotenv.env['OAUTH_CLIENT_ID']}&scope=profile');
-              return HomePage(title: "error");
-            } else {
-              
-              http2.post('/token',{'code': code[0]}).then((response){
-                    var result= jsonDecode(response.body);
-                    print(response.body);
-                    token=result['access_token'];
-                    if(token!=null){
-                      storage.setItem("token",token);
-                      
-                      html.window.location
-                        .replace('${location.protocol}//${location.host}${location.pathname??''}');
-                    }
-              });
-              return HomePage(title: "home");
-            }
-          } else {
-            http2.headers['Authorization'] = 'Bearer $token';
-            print(http2.headers);
-            return HomePage(title: "home");
-          }
-            } else {
-          return Text('Loading...');
-        }
-      },
-    );
+                print('as tol=' + token.toString());
+                if (token == null) {
+                  final query = state.queryParametersAll;
+                  dynamic code = query["code"];
+                  html.Location location = html.window.location;
+                  if (code == null) {
+                    location.replace(
+                        '${dotenv.env['OAUTH_URL']}authorize?response_type=code&client_id=${dotenv.env['OAUTH_CLIENT_ID']}&scope=profile');
+                    return HomePage(title: "error");
+                  } else {
+                    http2.post('/token', {'code': code[0]}).then((response) {
+                      var result = jsonDecode(response.body);
+                      print(response.body);
+                      token = result['access_token'];
+                      if (token != null) {
+                        storage.setItem("token", token);
+
+                        html.window.location.replace(
+                            '${location.protocol}//${location.host}${location.pathname ?? ''}');
+                      }
+                    });
+                    return HomePage(title: "home");
+                  }
+                } else {
+                  http2.headers['Authorization'] = 'Bearer $token';
+                  print(http2.headers);
+                  return HomePage(title: "home");
+                }
+              } else {
+                return Text('Loading...');
+              }
+            },
+          );
         },
         routes: <GoRoute>[
           //Detalles
@@ -118,8 +113,33 @@ getRouter() {
                   DetailFragment(movementId: int.parse(state.params['id']!))),
           GoRoute(
             path: routes["ins"],
-            builder: (BuildContext context, GoRouterState state) =>
-                HomePage(title: "Ingresos"),
+            builder: (BuildContext context, GoRouterState state) {
+              return FutureBuilder(
+                future: storage.ready,
+                builder: (BuildContext context, snapshot) {
+                  if (snapshot.data == true) {
+                    var token = storage.getItem('token');
+
+                    if (token == null) {
+                      html.Location location = html.window.location;
+                      return HomePage(
+                        title: "Ingresos",
+                        type: 'I',
+                      );
+                    } else {
+                      http2.headers['Authorization'] = 'Bearer $token';
+                      print(http2.headers);
+                      return HomePage(
+                        title: "Ingresos",
+                        type: 'I',
+                      );
+                    }
+                  } else {
+                    return Text('Loading...');
+                  }
+                },
+              );
+            },
           ),
           //Detalles
           GoRoute(
@@ -201,9 +221,38 @@ getRouter() {
               }),
           //Detalles
           GoRoute(
-            path: "out",
+              path: "out",
+              builder: (BuildContext context, GoRouterState state) {
+                return FutureBuilder(
+                  future: storage.ready,
+                  builder: (BuildContext context, snapshot) {
+                    if (snapshot.data == true) {
+                      var token = storage.getItem('token');
+
+                      if (token == null) {
+                        html.Location location = html.window.location;
+                        return HomePage(
+                          title: "Salidas",
+                          type: 'O',
+                        );
+                      } else {
+                        http2.headers['Authorization'] = 'Bearer $token';
+                        print(http2.headers);
+                        return HomePage(
+                          title: "Salidas",
+                          type: 'O',
+                        );
+                      }
+                    } else {
+                      return Text('Loading...');
+                    }
+                  },
+                );
+              }),
+          GoRoute(
+            path: "out/create",
             builder: (BuildContext context, GoRouterState state) =>
-                HomePage(title: "Salidas"),
+                OutputMovementPage("Registrar salida"),
           ),
           //Detalles
           GoRoute(

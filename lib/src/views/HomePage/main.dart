@@ -11,8 +11,9 @@ import 'package:localstorage/localstorage.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
+  final String type;
 
-  const HomePage({this.title = ''});
+  const HomePage({this.title = '', this.type = ''});
 
   @override
   State<HomePage> createState() => _HomePage();
@@ -28,17 +29,18 @@ class _HomePage extends State<HomePage> {
     });
   }
 
-  int _page=0;
-  int _size=0;
+  int _page = 0;
+  int _size = 0;
 
-  void _getDistricts(int page){
-      http2.get('/$page/20').then((response) {
-        var result= jsonDecode(response.body);
-        setState(() {
-          content=result['data']??[];
-          _size=result['size']??0;
-        });
+  void _getDistricts(int page) {
+    String params = widget.type != '' ? '?type=${widget.type}' : '';
+    http2.get('/$page/20$params').then((response) {
+      var result = jsonDecode(response.body);
+      setState(() {
+        content = result['data'] ?? [];
+        _size = result['size'] ?? 0;
       });
+    });
   }
 
   @override
@@ -97,7 +99,7 @@ class _HomePage extends State<HomePage> {
                   leading: new Icon(Icons.logout),
                   title: const Text("Cerrar"),
                   onTap: () {
-storage.deleteItem('token');
+                    storage.deleteItem('token');
                     context.go('/');
                   },
                 )),

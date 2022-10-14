@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 Future<Map> sendPostHTTPRequest(String url, String token, Map data) async {
+  await storage.ready;
   try {
     var response =
         await http.post(Uri.parse(dotenv.env['API_INVENTARY']! + url),
@@ -23,6 +24,7 @@ Future<Map> sendPostHTTPRequest(String url, String token, Map data) async {
 }
 
 Future<Map> sendGetHTTPRequest(String url, String token) async {
+  await storage.ready;
   try {
     var response = await http.get(Uri.parse(dotenv.env['API_INVENTARY']! + url),
         headers: <String, String>{
@@ -40,6 +42,7 @@ Future<Map> sendGetHTTPRequest(String url, String token) async {
 }
 
 Future<Map> sendPutHTTPRequest(String url, String token, Map data) async {
+  await storage.ready;
   try {
     var response = await http.put(Uri.parse(dotenv.env['API_INVENTARY']! + url),
         headers: <String, String>{
@@ -58,6 +61,7 @@ Future<Map> sendPutHTTPRequest(String url, String token, Map data) async {
 }
 
 Future<Map> sendDeleteHTTPRequest(String url, String token, Map data) async {
+  await storage.ready;
   try {
     var response =
         await http.delete(Uri.parse(dotenv.env['API_INVENTARY']! + url),

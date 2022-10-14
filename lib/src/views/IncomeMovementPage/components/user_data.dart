@@ -85,7 +85,7 @@ class _UserDataState extends State<UserData> {
     if (widget.id != null) {
       //Completa los datos del formulario y obtiene los detalles
       if (!flag) {
-        sendGetHTTPRequest('${widget.id}', 'asd').then((value2) {
+        sendGetHTTPRequest('/${widget.id}', 'asd').then((value2) {
           if (value2["status"]) {
             grow(value2["data"]);
             flag = true;
@@ -248,23 +248,44 @@ class _UserDataState extends State<UserData> {
                             onPressed: () async {
                               if (_key.currentState!.validate()) {
                                 _key.currentState!.save();
-                                var response =
-                                    await sendPostHTTPRequest('/in', '', {
-                                  "company": dataForm["unit"],
-                                  "date": dataForm["date"],
-                                  "dependence": dataForm["local"],
-                                  "dni": dataForm["document"],
-                                  "email": dataForm["email"],
-                                  "fullName": dataForm["fullname"],
-                                  "reference": dataForm["reference"],
-                                  "uid": dataForm["cod"]
-                                });
-                                if (response["status"]) {
-                                  context.go('/in/${response["data"]["id"]}');
+                                if (widget.id != null) {
+                                  var response = await sendPutHTTPRequest(
+                                      '/${widget.id}', '', {
+                                    "company": dataForm["unit"],
+                                    "date": dataForm["date"],
+                                    "dependence": dataForm["local"],
+                                    "dni": dataForm["document"],
+                                    "email": dataForm["email"],
+                                    "fullName": dataForm["fullname"],
+                                    "reference": dataForm["reference"],
+                                    "uid": dataForm["cod"],
+                                    "type": "I"
+                                  });
+                                  if (response["status"]) {
+                                    context.go('/in/${response["data"]["id"]}');
+                                  }
+                                } else {
+                                  var response =
+                                      await sendPostHTTPRequest('/in', '', {
+                                    "company": dataForm["unit"],
+                                    "date": dataForm["date"],
+                                    "dependence": dataForm["local"],
+                                    "dni": dataForm["document"],
+                                    "email": dataForm["email"],
+                                    "fullName": dataForm["fullname"],
+                                    "reference": dataForm["reference"],
+                                    "uid": dataForm["cod"],
+                                    "type": "I"
+                                  });
+                                  if (response["status"]) {
+                                    context.go('/in/${response["data"]["id"]}');
+                                  }
                                 }
                               }
                             },
-                            label: const Text('Grabar'),
+                            label: (widget.id != null)
+                                ? Text('Actualizar')
+                                : Text("Grabar"),
                           )),
                     ),
                   ])),
